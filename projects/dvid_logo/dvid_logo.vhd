@@ -21,17 +21,20 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity dvid_logo is
-    Port ( --clk50         : in  STD_LOGIC;
-           hdmi_in_p     : in  STD_LOGIC_VECTOR(3 downto 0);
-           hdmi_in_n     : in  STD_LOGIC_VECTOR(3 downto 0);
-           hdmi_in_sclk  : inout  STD_LOGIC;
-           hdmi_in_sdat  : inout  STD_LOGIC;
+library UNISIM;
+use UNISIM.VComponents.all;
 
-           hdmi_out_p : out  STD_LOGIC_VECTOR(3 downto 0);
-           hdmi_out_n : out  STD_LOGIC_VECTOR(3 downto 0);
-                      
-           leds       : out std_logic_vector(7 downto 0));
+entity dvid_logo is
+Port ( clk50         : in  STD_LOGIC;
+	hdmi_in_p     : in  STD_LOGIC_VECTOR(3 downto 0);
+	hdmi_in_n     : in  STD_LOGIC_VECTOR(3 downto 0);
+	hdmi_in_sclk  : inout  STD_LOGIC;
+	hdmi_in_sdat  : inout  STD_LOGIC;
+
+	hdmi_out_p : out  STD_LOGIC_VECTOR(3 downto 0);
+	hdmi_out_n : out  STD_LOGIC_VECTOR(3 downto 0);
+
+	leds       : out std_logic_vector(7 downto 0));
 end dvid_logo;
 
 architecture Behavioral of dvid_logo is
@@ -87,6 +90,7 @@ architecture Behavioral of dvid_logo is
 
 	COMPONENT dvid_in
 	PORT(
+      clk_debug  : in std_logic;
       clk_pixel  : out std_logic;
       leds     : out std_logic_vector(7 downto 0) := (others => '0');
 		red_p      : out std_logic_vector(7 downto 0);
@@ -99,11 +103,21 @@ architecture Behavioral of dvid_logo is
 		tmds_in_n  : in  std_logic_vector(3 downto 0)
 		);
 	END COMPONENT;
+	
+	COMPONENT edidslave
+	PORT(
+		rst_n : IN std_logic;
+		clk : IN std_logic;
+		scl : IN std_logic;
+		dvi_only : IN std_logic;
+		sda : INOUT std_logic
+		);
+	END COMPONENT;
 
 
 	signal clk_pixel : std_logic;
+	signal rst_n : std_logic := '1';
 
-   
    signal i_red     : std_logic_vector(7 downto 0);
    signal i_green   : std_logic_vector(7 downto 0);
    signal i_blue    : std_logic_vector(7 downto 0);
@@ -116,40 +130,48 @@ architecture Behavioral of dvid_logo is
    signal o_blue    : std_logic_vector(7 downto 0);
 	signal o_blank   : std_logic;
 	signal o_hsync   : std_logic;
-	signal o_vsync   : std_logic;          
+	signal o_vsync   : std_logic;
+
+	signal hdmi_in_sclk_buffered: std_logic;
    
 begin
-   hdmi_in_sclk  <= 'Z';
-   hdmi_in_sdat  <= 'Z';
+
    ----------------------------------
-   -- EDID I2C signals (not implemented)
+   -- EDID I2C signals
    ----------------------------------
---   hdmi_in_sclk  <= 'Z';
---   hdmi_in_sdat  <= 'Z';
+Inst_edidslave: edidslave PORT MAP(
+		rst_n => rst_n,
+		clk => clk_pixel,
+		sda => hdmi_in_sdat,
+		scl => hdmi_in_sclk,
+		dvi_only => '1'
+	);
+--	hdmi_in_sclk  <= 'Z';
+--	hdmi_in_sdat  <= 'Z';
 
 ---------------------------------------
 -- Generate a 1280x720 VGA test pattern
 ---------------------------------------
 --Inst_vga_gen: vga_gen PORT MAP(
 --		clk50 => clk50,
---		pixel_clock     => pixel_clock,      
---		red_p           => red_p,
---		green_p         => green_p,
---		blue_p          => blue_p,
---		blank           => blank,
---		hsync           => hsync,
---		vsync           => vsync
+--		pixel_clock     => clk_pixel,
+--		red_p           => i_red,
+--		green_p         => i_green,
+--		blue_p          => i_blue,
+--		blank           => i_blank,
+--		hsync           => i_hsync,
+--		vsync           => i_vsync
 --	);
 
----------------------------------------
--- Generate a 1280x720 VGA test pattern
----------------------------------------
+--BUFG_clk : BUFG port map ( I => hdmi_in_sclk, O => hdmi_in_sclk_buffered);
+
 Inst_dvid_in: dvid_in PORT MAP(
 		tmds_in_p => hdmi_in_p,
 		tmds_in_n => hdmi_in_n,
 
       leds => leds,
-      
+		clk_debug => clk50,
+
 		clk_pixel => clk_pixel,
 		red_p     => i_red,
 		green_p   => i_green,
@@ -158,6 +180,7 @@ Inst_dvid_in: dvid_in PORT MAP(
 		hsync     => i_hsync,
 		vsync     => i_vsync
 	);
+	
 
 	Inst_logo: logo PORT MAP(
 		clk_pixel => clk_pixel,
@@ -175,9 +198,15 @@ Inst_dvid_in: dvid_in PORT MAP(
 		o_hsync   => o_hsync,
 		o_vsync   => o_vsync
 	);
+--	o_red <= i_red;
+--	o_green <= i_green;
+--	o_blue <= i_blue;
+--	o_blank <= i_blank;
+--	o_hsync <= i_hsync;
+--	o_vsync <= i_vsync;
    
 ---------------------------------------------------
--- Convert the VGA signals to the DVI-D/TMDS output 
+-- Convert the VGA signals to the DVI-D/TMDS output
 ---------------------------------------------------
 Inst_dvid_out: dvid_out PORT MAP(
 		clk_pixel  => clk_pixel,

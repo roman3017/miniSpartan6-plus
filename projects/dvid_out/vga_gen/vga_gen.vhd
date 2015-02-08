@@ -79,8 +79,6 @@ process(clk75)
          if h_count = h_max then
             h_count <= (others => '0');
             if v_count = v_max then
-               --h_offset <= h_offset + 1;
-               --v_offset <= v_offset + 1;
                v_count <= (others => '0');
             else
                v_count <= v_count+1;

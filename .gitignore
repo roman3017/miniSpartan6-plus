@@ -18,3 +18,10 @@ simulation/
 *.veo
 *.vho
 *.html
+*.xml
+*.xsl
+*.svf
+*.xsvf
+*.xwbt
+*.cfi
+*.prm

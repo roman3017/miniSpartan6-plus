@@ -22,6 +22,7 @@ entity dvid_in is
            -- debug
            leds     : out std_logic_vector(7 downto 0) := (others => '0');
            -- VGA signals
+           clk_debug : in std_logic;
            clk_pixel : out std_logic;
            red_p     : out std_logic_vector(7 downto 0) := (others => '0');
            green_p   : out std_logic_vector(7 downto 0) := (others => '0');
@@ -38,7 +39,9 @@ architecture Behavioral of dvid_in is
    signal ioclock              : std_logic;
    signal serdes_strobe        : std_logic;
 
-      
+   signal count_debug : unsigned(27 downto 0) := (others => '0');
+   signal count : unsigned(27 downto 0) := (others => '0');
+
    signal clock_x1             : std_logic;
    signal clock_x2             : std_logic;
    signal clock_x10            : std_logic;
@@ -114,7 +117,7 @@ begin
    ----------------------------------
    -- Debug
    ----------------------------------
-   leds <= c2_c & (not c2_c) & framing;
+   --leds <= c2_c & (not c2_c) & framing;
 
 
 ------------------------------------------
@@ -323,4 +326,21 @@ process(clock_x1)
 
       end if;
    end process;
+
+	process (clk_debug)
+	begin
+	if rising_edge(clk_debug) then
+		count_debug <= count_debug+1;
+		leds(3 downto 0) <= STD_LOGIC_VECTOR(count_debug(count_debug'high downto count_debug'high-3));
+	end if;
+	end process;
+
+	process (clock_x1)
+	begin
+	if rising_edge(clock_x1) then
+		count <= count+1;
+		leds(7 downto 4) <= STD_LOGIC_VECTOR(count(count'high downto count'high-3));
+	end if;
+	end process;
+
 end Behavioral;
