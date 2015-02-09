@@ -12,6 +12,16 @@ xc3sprog -c ftdi -I dvid_serdes.bit
 xc3sprog -c ftdi -I -e
 ```
 
+## chipscope/impact
+
+```sh
+git clone https://github.com/roman3017/xvcd.git
+cd xvcd
+make
+build/xvcd&
+```
+use this cable plug-in: "xilinx_xvc host=localhost:2542 disableversioncheck=true" in impact/chipscope "cable setup.." while xvcd is running
+
 ## references
 
  - http://www.scarabhardware.com
@@ -21,3 +31,13 @@ xc3sprog -c ftdi -I -e
 ## board pinout
 
 ![board pinout](/miniSpartan6-plus.png)
+
+## scarab ide
+
+```sh
+git clone https://github.com/scarabhardware/ScarabIDE.git
+cd ScarabIDE
+ant
+cp build/shared/*.jar lib/
+. build/linux/mojo-ide
+```
