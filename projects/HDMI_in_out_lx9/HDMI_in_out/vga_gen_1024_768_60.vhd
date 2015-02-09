@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Mike Field <hamster@snap.net.nz>
--- Description: Generates a test 1024x768@60 signal 
+-- Description: Generates a test 1024x768@60 signal
+-- http://martin.hinner.info/vga/timing.html
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -19,17 +20,17 @@ end vga_gen;
 
 architecture Behavioral of vga_gen is
    constant h_rez        : natural := 1024;
-   constant h_sync_start : natural := 1024+24;
-   constant h_sync_end   : natural := 1024+24+136-1;
-   constant h_max        : natural := 1024+24+136+160-1;
-	constant h_polarity   : std_logic := '0';
+   constant h_sync_start : natural := 1048;
+   constant h_sync_end   : natural := 1184;
+   constant h_max        : natural := 1344-1;
+   constant h_polarity   : std_logic := '0';--'-'
    signal   h_count      : unsigned(11 downto 0) := (others => '0');
 
    constant v_rez        : natural := 768;
-   constant v_sync_start : natural := 768+3;
-   constant v_sync_end   : natural := 768+3+6-1;
-   constant v_max        : natural := 768+3+6+29-1;
-	constant v_polarity   : std_logic := '0';
+   constant v_sync_start : natural := 771;
+   constant v_sync_end   : natural := 777;
+   constant v_max        : natural := 806-1;
+   constant v_polarity   : std_logic := '0';--'-'
    signal   v_count      : unsigned(11 downto 0) := (others => '0');
    
 begin

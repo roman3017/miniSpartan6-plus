@@ -1,6 +1,8 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Mike Field <hamster@snap.net.nz>
 -- Description: Generates a test 1280x800@60 signal 
+-- http://tinyvga.com/vga-timing/1280x800@60Hz
+-- http://martin.hinner.info/vga/timing.html
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -20,16 +22,16 @@ end vga_gen;
 architecture Behavioral of vga_gen is
    constant h_rez        : natural := 1280;
    constant h_sync_start : natural := 1344;
-   constant h_sync_end   : natural := 1479;
-   constant h_max        : natural := 1679;
-	constant h_polarity   : std_logic := '0';
+   constant h_sync_end   : natural := 1480;
+   constant h_max        : natural := 1680-1;
+   constant h_polarity   : std_logic := '0';--'-'
    signal   h_count      : unsigned(11 downto 0) := (others => '0');
 
    constant v_rez        : natural := 800;
    constant v_sync_start : natural := 801;
-   constant v_sync_end   : natural := 803;
-   constant v_max        : natural := 827;
-	constant v_polarity   : std_logic := '1';
+   constant v_sync_end   : natural := 804;
+   constant v_max        : natural := 828-1;
+   constant v_polarity   : std_logic := '1';--'+'
    signal   v_count      : unsigned(11 downto 0) := (others => '0');
    
 begin

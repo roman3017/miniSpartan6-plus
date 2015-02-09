@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Mike Field <hamster@snap.net.nz>
--- Description: Generates a test 1280x720 signal 
+-- Description: Generates a test 1280x720 signal
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -20,14 +20,14 @@ end vga_gen;
 architecture Behavioral of vga_gen is
    constant h_rez        : natural := 1280;
    constant h_sync_start : natural := 1280+72;
-   constant h_sync_end   : natural := 1280+80;
-   constant h_max        : natural := 1647;
+   constant h_sync_end   : natural := 1280+72+80;
+   constant h_max        : natural := 1648-1;
    signal   h_count      : unsigned(11 downto 0) := (others => '0');
 
    constant v_rez        : natural := 720;
    constant v_sync_start : natural := 720+3;
    constant v_sync_end   : natural := 720+3+5;
-   constant v_max        : natural := 720+29;
+   constant v_max        : natural := 748-1;
    signal   v_count      : unsigned(11 downto 0) := (others => '0');
    
 begin

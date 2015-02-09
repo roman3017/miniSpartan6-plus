@@ -22,14 +22,14 @@ end vga_gen;
 architecture Behavioral of vga_gen is
    constant h_rez        : natural := 1280;
    constant h_sync_start : natural := 1280+72;
-   constant h_sync_end   : natural := 1280+80;
-   constant h_max        : natural := 1647;
+   constant h_sync_end   : natural := 1280+72+80;
+   constant h_max        : natural := 1648-1;
    signal   h_count      : unsigned(11 downto 0) := (others => '0');
 
-   constant v_rez        : natural :=720;
+   constant v_rez        : natural := 720;
    constant v_sync_start : natural := 720+3;
    constant v_sync_end   : natural := 720+3+5;
-   constant v_max        : natural := 720+29;
+   constant v_max        : natural := 750-1;
    signal   v_count      : unsigned(11 downto 0) := (others => '0');
    
 begin
@@ -44,13 +44,13 @@ process(clk75)
 				if pattern ="0000" then
 					red   <=std_logic_vector(h_count(10 downto 3));
 					green <= std_logic_vector(v_count(9 downto 2));
-					blue  <= std_logic_vector(h_count(7 downto 0)+v_count(7 downto 0));            
+					blue  <= std_logic_vector(h_count(7 downto 0)+v_count(7 downto 0));
 					blank <= '0';
 
-				else 
+				else
 				if pattern ="1110" then
 				
-					if (h_count(6) xor v_count(6))='1' then					
+					if (h_count(6) xor v_count(6))='1' then
 						red   <= "11111111";
 						green <= "11111111";
 						blue  <= "11111111";
@@ -59,7 +59,7 @@ process(clk75)
 						red   <= "00000000";
 						green <= "00000000";
 						blue  <= "00000000";
-					end if;			
+					end if;
 					blank <= '0';
 				
 				else if pattern ="1111" then
@@ -96,7 +96,7 @@ process(clk75)
 					blank <= '0';
 				end if;
 				end if;
-				end if;	
+				end if;
 				end if;
 				end if;
 

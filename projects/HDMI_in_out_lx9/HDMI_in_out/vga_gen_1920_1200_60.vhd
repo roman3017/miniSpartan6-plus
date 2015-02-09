@@ -1,6 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Mike Field <hamster@snap.net.nz>
 -- Description: Generates a test 1920x1200@60 signal 
+-- http://martin.hinner.info/vga/timing.html
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -20,16 +21,16 @@ end vga_gen;
 architecture Behavioral of vga_gen is
    constant h_rez        : natural := 1920;
    constant h_sync_start : natural := 2048;
-   constant h_sync_end   : natural := 2255;
-   constant h_max        : natural := 2591;
-	constant h_polarity   : std_logic := '0';
+   constant h_sync_end   : natural := 2256;
+   constant h_max        : natural := 2592-1;
+   constant h_polarity   : std_logic := '0';--'-'
    signal   h_count      : unsigned(11 downto 0) := (others => '0');
 
    constant v_rez        : natural := 1200;
    constant v_sync_start : natural := 1201;
-   constant v_sync_end   : natural := 1203;
-   constant v_max        : natural := 1241;
-	constant v_polarity   : std_logic := '1';
+   constant v_sync_end   : natural := 1204;
+   constant v_max        : natural := 1242-1;
+   constant v_polarity   : std_logic := '1';--'+'
    signal   v_count      : unsigned(11 downto 0) := (others => '0');
    
 begin
