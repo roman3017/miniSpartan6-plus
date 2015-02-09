@@ -31,6 +31,9 @@ use this cable plug-in: "xilinx_xvc host=localhost:2542 disableversioncheck=true
 ## board pinout
 
 ![board pinout](/miniSpartan6-plus.png)
+miniSpartan6+ pinout diagram by jamesots and jbeale1
+ - https://github.com/jamesots/learnfpga
+ - https://github.com/jbeale1/FPGA
 
 ## scarab ide
 
