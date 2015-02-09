@@ -131,8 +131,6 @@ architecture Behavioral of dvid_logo is
 	signal o_blank   : std_logic;
 	signal o_hsync   : std_logic;
 	signal o_vsync   : std_logic;
-
-	signal hdmi_in_sclk_buffered: std_logic;
    
 begin
 
@@ -141,7 +139,7 @@ begin
    ----------------------------------
 Inst_edidslave: edidslave PORT MAP(
 		rst_n => rst_n,
-		clk => clk_pixel,
+		clk => clk50,
 		sda => hdmi_in_sdat,
 		scl => hdmi_in_sclk,
 		dvi_only => '1'
@@ -162,8 +160,6 @@ Inst_edidslave: edidslave PORT MAP(
 --		hsync           => i_hsync,
 --		vsync           => i_vsync
 --	);
-
---BUFG_clk : BUFG port map ( I => hdmi_in_sclk, O => hdmi_in_sclk_buffered);
 
 Inst_dvid_in: dvid_in PORT MAP(
 		tmds_in_p => hdmi_in_p,

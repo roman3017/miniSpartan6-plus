@@ -32,13 +32,13 @@
  if no monitor is connected only dvi rom is transmitted. 
 */
 
-module edidslave (rst_n,clk,sda,scl,dvi_only);
+module edidslave (rst_n,clk,sda,scl,dvi_only,leds);
 input clk;
 input rst_n;
 input scl;
 inout sda;
 input dvi_only;
-
+output reg [7:0] leds;
 
 // edid rom -------------------------------------------------------------------------
 reg [7:0] adr;
@@ -244,7 +244,7 @@ always @(posedge clk) begin
 					state <= WAIT_WRITE_BYTE_ACK;
 				end
 			end
-			
+
 			WAIT_WRITE_BYTE_ACK: begin//11
 				if (scl_risingedge) begin
 					if (~sdain) begin
@@ -254,15 +254,17 @@ always @(posedge clk) begin
 					end
 				end
 			end
-			
+
 			default : begin
 				state <= INI;
 			end
-				
-		endcase		
 
+		endcase
+
+		leds[5:0] <= state;
+		leds[7] <= sda;
+		leds[6] <= scl;
 	end
 end
-
 
 endmodule

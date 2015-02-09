@@ -91,12 +91,8 @@ architecture Behavioral of dvi_in is
    signal c2_c       : std_logic_vector(1 downto 0);
    signal c2_active  : std_logic;
 
-   signal led_count   : unsigned( 2 downto 0)        := (others => '0');
    signal framing     : std_logic_vector(3 downto 0) := (others => '0');
    signal since_sync  : unsigned(14 downto 0)        := (others => '0');
-	
-	signal counter     : std_logic_vector(3 downto 0) := (others => '0');
-   signal led_counter     : unsigned(32 downto 0) := (others => '0');
    
    signal start_calibrate : std_logic;
    signal reset_delay     : std_logic;
@@ -149,11 +145,9 @@ architecture Behavioral of dvi_in is
    signal tmds_out_blue_t  : std_logic;
    signal tmds_out_clock_t : std_logic;
 	
-	
-	
   COMPONENT vga_gen
 	PORT(
-		clk65 : IN std_logic;          
+		clk75 : IN std_logic;
 		red   : OUT std_logic_vector(7 downto 0);
 		green : OUT std_logic_vector(7 downto 0);
 		blue  : OUT std_logic_vector(7 downto 0);
@@ -198,9 +192,11 @@ architecture Behavioral of dvi_in is
 		clk : IN std_logic;
 		scl : IN std_logic;
 		dvi_only : IN std_logic;
-		sda : INOUT std_logic
+		sda : INOUT std_logic;
+		leds : OUT std_logic_vector(7 downto 0)
 		);
 	END COMPONENT;
+
 ---------------------------------------------------------------------
 
 begin
@@ -208,43 +204,38 @@ begin
 process (clk50)
 begin
 	if btns(0)='1' then
-			sel<="11111111";
-			sel2<="00000000";
+		sel<="11111111";
+		sel2<="00000000";
 	else
-			sel2<="11111111";
-			sel<="00000000";
+		sel2<="11111111";
+		sel<="00000000";
 	end if;
-	
-	end process;
-	
+end process;
+
    ----------------------------------
    -- Output the decoded VGA signals
    ----------------------------------
    red   <= c0_d(7 downto 5);
    blue  <= c1_d(7 downto 6);
    green <= c2_d(7 downto 5);
-   hsync0 <= c0_active;--c0_c(0);
+   hsync0 <= c0_active;
    vsync0 <= blank_t;
 	hsync1 <= c1_c(0);
    vsync1 <= c1_c(1);
 	hsync2 <= hsync_t;
    vsync2 <= vsync_t;
 
-   ----------------------------------
-   -- Debug
-   ----------------------------------
-   --leds <= framing;
 	----------------------------------
    -- EDID I2C signals
    ----------------------------------
 Inst_edidslave: edidslave PORT MAP(
 		rst_n => '1',
-		clk => hdmi_clk_buffered,
+		clk => clk50,
 		sda => hdmi_sdat,
 		scl => hdmi_sclk,
-		dvi_only => '1'
+		dvi_only => '1',
+		leds => leds
 	);
-
 ------------------------------------------
 -- Receive the differential clock
 ------------------------------------------
@@ -258,7 +249,7 @@ clk_diff_input : IBUFDS
       I  => hdmi_clk_p,
       IB => hdmi_clk_n
    );
-   
+
 ------------------------------------------
 -- Buffer it before the PLL
 ------------------------------------------
@@ -281,7 +272,7 @@ PLL_BASE_inst : PLL_BASE
       CLKOUT1_DIVIDE => 5,       CLKOUT1_PHASE => 0.0,   -- Output 2x original frequency
       CLKOUT2_DIVIDE => 10,      CLKOUT2_PHASE => 0.0,    -- Output 1x original frequency
       CLK_FEEDBACK => "CLKFBOUT",                         -- Clock source to drive CLKFBIN ("CLKFBOUT" or "CLKOUT0")
-      CLKIN_PERIOD => 15.38,                               -- IMPORTANT! Approx 65 MHz
+      CLKIN_PERIOD => 20.0,                               -- IMPORTANT! 50 MHz
       DIVCLK_DIVIDE => 1                                  -- Division value for all output clocks (1-52)
    )
       port map (
@@ -486,7 +477,7 @@ Inst_clocking: clocking PORT MAP(
 temp_data <= std_logic_vector( ( signed("00"& (not c0_d)) + signed("00"&c1_d) + signed("00"&(not c2_d))));	
 
 i_vga_gen: vga_gen PORT MAP(
-		clk65 => pixel_clock_t,
+		clk75 => pixel_clock_t,
 		red   => green_t,
 		green => red_t,
 		blue  => blue_t,
