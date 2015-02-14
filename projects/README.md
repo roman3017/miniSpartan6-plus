@@ -4,7 +4,7 @@
  - https://github.com/scarabhardware/miniSpartan6-plus
  - https://github.com/timvideos/HDMI2USB
 
-## dvid_out dvid_logo
+## dvid_out dvid_logo ov7670
  - http://hamsterworks.co.nz/mediawiki/index.php/FPGA_Projects
 
 ## audio
