@@ -38,10 +38,10 @@ begin
             when x"01" => sreg <= x"1280"; -- COM7   Reset
             when x"02" => sreg <= x"1100"; -- CLKRC  Prescaler - Fin/(1+1)
             when x"03" => sreg <= x"1204"; -- COM7   QIF + RGB output
-            when x"04" => sreg <= x"0C04"; -- COM3  Lots of stuff, enable scaling, all others off
+            when x"04" => sreg <= x"0C04"; -- COM3   Lots of stuff, enable scaling, all others off
             when x"05" => sreg <= x"3E19"; -- COM14  PCLK scaling = 0
             
-             when x"06" => sreg <= x"4010"; -- COM15  Full 0-255 output, RGB 565
+            when x"06" => sreg <= x"4010"; -- COM15  Full 0-255 output, RGB 565
             when x"07" => sreg <= x"3a04"; -- TSLB   Set UV ordering,  do not auto-reset window
             when x"08" => sreg <= x"8C00"; -- RGB444 Set RGB format
             

@@ -14,7 +14,7 @@ entity ov7670_capture is
            href  : in   STD_LOGIC;
            d     : in   STD_LOGIC_VECTOR (7 downto 0);
            addr  : out  STD_LOGIC_VECTOR (14 downto 0);
-           dout  : out  STD_LOGIC_VECTOR (7 downto 0);
+           dout  : out  STD_LOGIC_VECTOR (15 downto 0);
            we    : out  STD_LOGIC);
 end ov7670_capture;
 
@@ -22,10 +22,10 @@ architecture Behavioral of ov7670_capture is
    signal d_latch    : std_logic_vector(7 downto 0)  := (others => '0');
    signal href_last  : std_logic;
    signal cnt        : std_logic_vector(1 downto 0)  := (others => '0');
-   signal hold_red   : std_logic_vector(2 downto 0)  := (others => '0');
+   signal hold_red   : std_logic_vector(4 downto 0)  := (others => '0');
    signal hold_green : std_logic_vector(2 downto 0)  := (others => '0');
    signal address    : STD_LOGIC_VECTOR(14 downto 0) := (others => '0');
-   
+
 begin
    addr <= address;
    process(pclk)
@@ -36,8 +36,8 @@ begin
             address <= (others => '1');
             href_last <= '0';
             cnt <= "00";
-         else       
-            if href_last = '1' and address /= "100101011111111" then
+         else
+            if href_last = '1' and unsigned(address) /= 19199 then
                if cnt = "11"  then
                  address <= std_logic_vector(unsigned(address)+1);
                end if;
@@ -47,13 +47,16 @@ begin
                cnt <= std_logic_vector(unsigned(cnt)+1);
             end if;
          end if;
-         
-         dout <= hold_red & hold_green & d_latch(4 downto 3); -- d(4:3) is blue;         
 
-         hold_green   <= d_latch(7 downto 5);  
-         hold_red <= d_latch(2 downto 0);
-         d_latch <= d;
-         
+			-- rgb565
+			-- RRRRRGGG
+			-- GGGBBBBB
+         dout <= hold_red & hold_green & d_latch;
+
+         hold_red <= d_latch(7 downto 3);--d0(7:3) is red
+         hold_green <= d_latch(2 downto 0);--d0(2:0) is green
+         d_latch <= d;-- d1(7:5) is green and d1(4:0) is blue
+
          href_last <= href;
       end if;
    end process;
