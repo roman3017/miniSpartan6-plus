@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Mike Field <hamster@snap.net.nz>
 --
--- Description: Generate analog 800x600@72Hz VGA, double-doublescanned from 640x30=19200 bytes of RAM
+-- Description: Generate analog 640x480@60Hz VGA, double-doublescanned from 640x30=19200 bytes of RAM
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -10,7 +10,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity vga is
     Port (
-      clk50       : in  STD_LOGIC;
+      clk25       : in  STD_LOGIC;
       vga_red     : out STD_LOGIC_VECTOR(5 downto 1);
       vga_green   : out STD_LOGIC_VECTOR(5 downto 0);
       vga_blue    : out STD_LOGIC_VECTOR(5 downto 1);
@@ -24,17 +24,17 @@ end vga;
 
 architecture Behavioral of vga is
    -- Timing constants
-   constant hRez       : natural := 800;
-   constant vRez       : natural := 600;
+   constant hRez       : natural := 640;
+   constant vRez       : natural := 480;
 
-   constant hMaxCount  : natural := 1040;
-   constant hStartSync : natural := 856;
-   constant hEndSync   : natural := 976;
-   constant vMaxCount  : natural := 666;
-   constant vStartSync : natural := 637;
-   constant vEndSync   : natural := 643;
-   constant hsync_active : std_logic := '1';
-   constant vsync_active : std_logic := '1';
+   constant hMaxCount  : natural := 800;
+   constant hStartSync : natural := 656;
+   constant hEndSync   : natural := 752;
+   constant vMaxCount  : natural := 525;
+   constant vStartSync : natural := 490;
+   constant vEndSync   : natural := 492;
+   constant hsync_active : std_logic := '0';
+   constant vsync_active : std_logic := '0';
 
    signal hCounter : unsigned(10 downto 0) := (others => '0');
    signal vCounter : unsigned(9 downto 0) := (others => '0');
@@ -43,10 +43,9 @@ architecture Behavioral of vga is
 
 begin
    frame_addr <= std_logic_vector(address(16 downto 2));
-
-   process(clk50)
+   process(clk25)
    begin
-      if rising_edge(clk50) then
+      if rising_edge(clk25) then
          -- Count the lines and rows
          if hCounter = hMaxCount-1 then
             hCounter <= (others => '0');

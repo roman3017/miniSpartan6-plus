@@ -19,11 +19,9 @@ entity ov7670_capture is
 end ov7670_capture;
 
 architecture Behavioral of ov7670_capture is
-   signal d_latch    : std_logic_vector(7 downto 0)  := (others => '0');
+   signal d_latch    : std_logic_vector(15 downto 0)  := (others => '0');
    signal href_last  : std_logic;
    signal cnt        : std_logic_vector(1 downto 0)  := (others => '0');
-   signal hold_red   : std_logic_vector(4 downto 0)  := (others => '0');
-   signal hold_green : std_logic_vector(2 downto 0)  := (others => '0');
    signal address    : STD_LOGIC_VECTOR(14 downto 0) := (others => '0');
 
 begin
@@ -48,14 +46,9 @@ begin
             end if;
          end if;
 
-			-- rgb565
-			-- RRRRRGGG
-			-- GGGBBBBB
-         dout <= hold_red & hold_green & d_latch;
-
-         hold_red <= d_latch(7 downto 3);--d0(7:3) is red
-         hold_green <= d_latch(2 downto 0);--d0(2:0) is green
-         d_latch <= d;-- d1(7:5) is green and d1(4:0) is blue
+			-- rgb565 rrrrrggg gggbbbbb
+         dout <= d_latch;
+         d_latch <= d_latch(7 downto 0) & d;
 
          href_last <= href;
       end if;

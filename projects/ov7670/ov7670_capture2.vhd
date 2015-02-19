@@ -19,14 +19,14 @@ entity ov7670_capture2 is
            vsync : in   STD_LOGIC;
            href  : in   STD_LOGIC;
            d     : in   STD_LOGIC_VECTOR (7 downto 0);
-           addr  : out  STD_LOGIC_VECTOR (18 downto 0);
-           dout  : out  STD_LOGIC_VECTOR (11 downto 0);
+           addr  : out  STD_LOGIC_VECTOR (14 downto 0);
+           dout  : out  STD_LOGIC_VECTOR (15 downto 0);
            we    : out  STD_LOGIC);
 end ov7670_capture2;
 
 architecture Behavioral of ov7670_capture2 is
    signal d_latch      : std_logic_vector(15 downto 0) := (others => '0');
-   signal address      : STD_LOGIC_VECTOR(18 downto 0) := (others => '0');
+   signal address      : STD_LOGIC_VECTOR(14 downto 0) := (others => '0');
    signal line         : std_logic_vector(1 downto 0)  := (others => '0');
    signal href_last    : std_logic_vector(6 downto 0)  := (others => '0');
    signal we_reg       : std_logic := '0';
@@ -37,7 +37,7 @@ architecture Behavioral of ov7670_capture2 is
 begin
    addr <= address;
    we <= we_reg;
-   dout    <= d_latch(15 downto 12) & d_latch(10 downto 7) & d_latch(4 downto 1); 
+   dout    <= d_latch; 
    
 capture_process: process(pclk)
    begin

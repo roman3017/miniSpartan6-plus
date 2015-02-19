@@ -65,7 +65,7 @@ architecture Behavioral of ov7670_top is
 
    COMPONENT vga
    PORT(
-      clk50 : IN std_logic;
+      clk25 : IN std_logic;
       vga_red : OUT std_logic_vector(5 downto 1);
       vga_green : OUT std_logic_vector(5 downto 0);
       vga_blue : OUT std_logic_vector(5 downto 1);
@@ -100,6 +100,7 @@ architecture Behavioral of ov7670_top is
 
    signal resend : std_logic := '0';
    signal config_finished : std_logic;
+   signal clk25 : std_logic;
 
    signal vga_red     : std_logic_vector(7 downto 0);
    signal vga_green   : std_logic_vector(7 downto 0);
@@ -109,8 +110,15 @@ architecture Behavioral of ov7670_top is
 	signal vga_vsync   : std_logic;
 begin
 
+process(clk50)
+   begin
+      if rising_edge(clk50) then
+         clk25 <= not clk25;
+      end if;
+   end process;
+
 Inst_vga: vga PORT MAP(
-      clk50       => clk50,
+      clk25       => clk25,
       vga_red     => vga_red(7 downto 3),
       vga_green   => vga_green(7 downto 2),
       vga_blue    => vga_blue(7 downto 3),
@@ -136,8 +144,7 @@ Inst_dvid_out: dvid_out PORT MAP(
 		tmds_out_n => hdmi_out_n
 	);
 
-fb : frame_buffer
-  PORT MAP (
+fb : frame_buffer PORT MAP (
     clka  => OV7670_PCLK,
     wea   => capture_we,
     addra => capture_addr,
