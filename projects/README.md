@@ -10,3 +10,6 @@
 ## audio
  - http://www.scarabhardware.com/forums/topic/audio-from-the-minispartan/#post-645
 
+## mojo-uart
+ - https://embeddedmicro.com/tutorials/mojo/asynchronous-serial
+
