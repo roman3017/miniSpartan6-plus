@@ -9,7 +9,7 @@ code source:
  - https://github.com/timvideos/HDMI2USB
 
 <hr>
-dvid and ov7670 projects: 
+dvid and ov7670 projects:
  - dvid_out
  - dvid_logo
  - dvid_test_hd
@@ -33,5 +33,6 @@ uart projects:
 
 code source:
  - https://embeddedmicro.com/tutorials/mojo/asynchronous-serial
+ - http://www.saanlima.com/download/pipistrello-v2.0/setmode.zip
 
 <hr>
