@@ -1,0 +1,67 @@
+
+#Created by Constraints Editor (xc6slx9-tqg144-3) - 2014/07/09
+NET clk32    LOC=J4  | PERIOD=31.25 ns;
+NET RX       LOC=M7 | IOSTANDARD=LVTTL | DRIVE=8;
+NET TX       LOC=N6 | IOSTANDARD=LVTTL | DRIVE=8;
+###
+NET Audio_L  LOC=B8 | IOSTANDARD=LVTTL;                                # C0
+NET Audio_R  LOC=A8 | IOSTANDARD=LVTTL;
+###
+NET LED<7>   LOC=P7 | IOSTANDARD=LVTTL;
+NET LED<6>   LOC=P8 | IOSTANDARD=LVTTL;
+NET LED<5>   LOC=N8 | IOSTANDARD=LVTTL;
+NET LED<4>   LOC=T8 | IOSTANDARD=LVTTL;
+NET LED<3>   LOC=P9 | IOSTANDARD=LVTTL;
+NET LED<2>   LOC=M9 | IOSTANDARD=LVTTL;
+NET LED<1>   LOC=N9 | IOSTANDARD=LVTTL;
+NET LED<0>   LOC=P11 | IOSTANDARD=LVTTL;
+###
+#NET BTN<3>   LOC=P131 | IOSTANDARD=LVTTL;
+#NET BTN<2>   LOC=P132 | IOSTANDARD=LVTTL;
+#NET BTN<1>   LOC=P133 | IOSTANDARD=LVTTL;
+#NET BTN<0>   LOC=P134 | IOSTANDARD=LVTTL;
+
+#NET I2S_MCLK LOC=P48; # Pin 1
+#NET I2S_LRCK LOC=P51; # Pin 2
+#NET I2S_SCLK LOC=P56; # Pin 3
+#NET I2S_SDAT LOC=P58; # Pin 4
+
+NET SDRAM_ADDR(0)  LOC="T15" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR0
+NET SDRAM_ADDR(1)  LOC="R16" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR1
+NET SDRAM_ADDR(2)  LOC="P15" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR2
+NET SDRAM_ADDR(3)  LOC="P16" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR3
+NET SDRAM_ADDR(4)  LOC="N16"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR4
+NET SDRAM_ADDR(5)  LOC="M15"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR5
+NET SDRAM_ADDR(6)  LOC="M16"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR6
+NET SDRAM_ADDR(7)  LOC="L16"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR7
+NET SDRAM_ADDR(8)  LOC="K15"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR8
+NET SDRAM_ADDR(9)  LOC="K16"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR9
+NET SDRAM_ADDR(10) LOC="R15" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR10
+NET SDRAM_ADDR(11) LOC="J16"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR11
+NET SDRAM_ADDR(12) LOC="H15"  | IOSTANDARD=LVTTL;                                # SDRAM_ADDR12
+NET SDRAM_DQ(0)  LOC="T13"   | IOSTANDARD=LVTTL;                                # SDRAM_DQ0
+NET SDRAM_DQ(1)  LOC="T12"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ1
+NET SDRAM_DQ(2)  LOC="R12"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ2
+NET SDRAM_DQ(3)  LOC="T9"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ3
+NET SDRAM_DQ(4)  LOC="R9"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ4
+NET SDRAM_DQ(5)  LOC="T7"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ5
+NET SDRAM_DQ(6)  LOC="R7"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ6
+NET SDRAM_DQ(7)  LOC="T6"   | IOSTANDARD=LVTTL;                                # SDRAM_DQ7
+NET SDRAM_DQ(8)  LOC="F16"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ8
+NET SDRAM_DQ(9)  LOC="E15"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ9
+NET SDRAM_DQ(10) LOC="E16"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ10
+NET SDRAM_DQ(11) LOC="D16"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ11
+NET SDRAM_DQ(12) LOC="B16"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ12
+NET SDRAM_DQ(13) LOC="B15"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ13
+NET SDRAM_DQ(14) LOC="C16"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ14
+NET SDRAM_DQ(15) LOC="C15"  | IOSTANDARD=LVTTL;                                # SDRAM_DQ15
+NET SDRAM_DQM(0)   LOC="T5"   | IOSTANDARD=LVTTL;                                # SDRAM_DQML
+NET SDRAM_DQM(1)   LOC="F15"  | IOSTANDARD=LVTTL;                                # SDRAM_DQMH
+NET SDRAM_BA(0)    LOC="R14" | IOSTANDARD=LVTTL;                                # SDRAM_BA0
+NET SDRAM_BA(1)    LOC="T14" | IOSTANDARD=LVTTL;                                # SDRAM_BA1
+NET SDRAM_WE      LOC="R5"   | IOSTANDARD=LVTTL;                                # SDRAM_nWE
+NET SDRAM_CAS     LOC="T4"   | IOSTANDARD=LVTTL;                                # SDRAM_nCAS
+NET SDRAM_RAS     LOC="R2"   | IOSTANDARD=LVTTL;                                # SDRAM_nRAS
+NET SDRAM_CS       LOC="R1"   | IOSTANDARD=LVTTL;                                # SDRAM_CS
+NET SDRAM_CLK      LOC="G16"  | IOSTANDARD=LVTTL;                                # SDRAM_CLK
+NET SDRAM_CKE      LOC="H16"  | IOSTANDARD=LVTTL;                                # SDRAM_CKE

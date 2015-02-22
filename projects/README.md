@@ -1,4 +1,5 @@
-#projects status and code sources
+#projects and code sources
+
 <hr>
 basic hdmi projects:
  - hdmi_out
@@ -9,12 +10,13 @@ code source:
  - https://github.com/timvideos/HDMI2USB
 
 <hr>
-dvid and ov7670 projects:
+dvid, sdram and ov7670 projects:
  - dvid_out
  - dvid_logo
  - dvid_test_hd
  - ov7670
- - ov7670_fr (not working properly)
+ - ov7670_fr (not working properly, should try to use sdram)
+ - upsample
 
 code source:
  - http://hamsterworks.co.nz/mediawiki/index.php/FPGA_Projects
