@@ -3,13 +3,22 @@
 ## programming
 
 ```sh
+# build xc3prog
+sudo apt-get install subversion cmake build-essential libftdi-dev
+svn co https://xc3sprog.svn.sourceforge.net/svnroot/xc3sprog/trunk xc3sprog
+cd xc3sprog/
+mkdir build
+cd build
+cmake -DUSE_FTD2XX=OFF ..
+make
+sudo ./xc3sprog -c ftdi
 # program fpga
-xc3sprog -c ftdi dvid_serdes.bit
+sudo ./xc3sprog -c ftdi dvid_serdes.bit
 # program SPI flash
-xc3sprog -c ftdi bscan_spi_s6lx9_ftg256.bit
-xc3sprog -c ftdi -I dvid_serdes.bit
+sudo ./xc3sprog -c ftdi bscan_spi_s6lx9_ftg256.bit
+sudo ./xc3sprog -c ftdi -I dvid_serdes.bit
 # erase SPI flash
-xc3sprog -c ftdi -I -e
+sudo ./xc3sprog -c ftdi -I -e
 ```
 
 ## chipscope/impact
@@ -18,9 +27,13 @@ xc3sprog -c ftdi -I -e
 git clone https://github.com/roman3017/xvcd.git
 cd xvcd
 make
-build/xvcd&
+sudo build/xvcd &
 ```
-use this cable plug-in: "xilinx_xvc host=localhost:2542 disableversioncheck=true" in impact/chipscope "cable setup.." while xvcd is running
+use this cable plug-in:
+
+ "xilinx_xvc host=localhost:2542 disableversioncheck=true" 
+
+in impact/chipscope "cable setup.." while xvcd is running
 
 ## references
 
@@ -38,9 +51,12 @@ miniSpartan6+ pinout diagram by jamesots and jbeale1
 ## scarab ide
 
 ```sh
+# build ide
 git clone https://github.com/scarabhardware/ScarabIDE.git
 cd ScarabIDE
+sudo apt-get install ant
 ant
 cp build/shared/*.jar lib/
+# run it
 . build/linux/mojo-ide
 ```
