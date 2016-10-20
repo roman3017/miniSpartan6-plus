@@ -1,13 +1,13 @@
 
 #Instructions
-##To generate updated Pinsec.v
+##Generate updated Pinsec.v if needed
 ```
 git clone git@github.com:SpinalHDL/SpinalHDL.git
 cd SpinalHDL/
 sbt "project SpinalHDL-lib" "run-main spinal.lib.soc.pinsec.Pinsec"
 ls Pinsec.v
 ```
-need this change:
+Need this change:
 ```
 diff --git a/lib/src/main/scala/spinal/lib/soc/pinsec/Pinsec.scala b/lib/src/main/scala/spinal/lib/soc/pinsec/Pinsec.scala
 index 249ebb6..19b08ee 100644
@@ -53,7 +53,7 @@ index 249ebb6..19b08ee 100644
 +    config.generateVhdl(new Pinsec(50 MHz))
    }
 ```
-##To compile RISCV software
+##Compile RISCV software
 ```
 git clone git@github.com:Dolu1990/pinsecSoftware.git
 cd pinsecSoftware/
@@ -61,7 +61,38 @@ export RISCV_PATH=/opt/riscv32i/
 export RISCV_NAME=riscv32-unknown-elf
 make
 ```
-##To compile openocd for JTAG
+Need this linker and clock change:
+```
+diff --git a/resources/linker.ld b/resources/linker.ld
+index 9e40908..91d0b38 100755
+--- a/resources/linker.ld
++++ b/resources/linker.ld
+@@ -18,8 +18,14 @@ OUTPUT_ARCH( "riscv" )
+ /*----------------------------------------------------------------------*/
+ 
+ MEMORY {
+-  onChipRam (W!RX)/*(RX)*/ : ORIGIN = 0x00000000, LENGTH = 96K
+-  sdram (W!RX) : ORIGIN = 0x40000000, LENGTH = 64M
++  onChipRam (W!RX) : ORIGIN = 0x00000000, LENGTH = 36K
++  sdram (W!RX) : ORIGIN = 0x40000000, LENGTH = 32M
+ }
+ _stack_size = 2k;
+ _heap_size = 8k;
+diff --git a/tests/cDemo/src/main.c b/tests/cDemo/src/main.c
+index 2f07745..bc7dc4b 100755
+--- a/tests/cDemo/src/main.c
++++ b/tests/cDemo/src/main.c
+@@ -3,7 +3,7 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ 
+-#define CORE_HZ 100000000
++#define CORE_HZ 50000000
+ 
+ #define GPIO_A_BASE    ((volatile uint32_t*)(0xF0000000))
+ #define GPIO_B_BASE    ((volatile uint32_t*)(0xF0001000))
+```
+##Compile openocd
 ```
 git clone git@github.com:Dolu1990/openocd_riscv.git
 cd openocd_riscv
