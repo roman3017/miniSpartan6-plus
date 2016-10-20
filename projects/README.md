@@ -38,3 +38,10 @@ code source:
  - http://www.saanlima.com/download/pipistrello-v2.0/setmode.zip
 
 <hr>
+riscv projects:
+ - pinsec
+
+code source:
+ - https://github.com/SpinalHDL/SpinalHDL
+ - ​https://github.com/Dolu1990/openocd_riscv
+ - https://github.com/Dolu1990/pinsecSoftware
