@@ -7,6 +7,52 @@ cd SpinalHDL/
 sbt "project SpinalHDL-lib" "run-main spinal.lib.soc.pinsec.Pinsec"
 ls Pinsec.v
 ```
+need this change:
+```
+diff --git a/lib/src/main/scala/spinal/lib/soc/pinsec/Pinsec.scala b/lib/src/main/scala/spinal/lib/soc/pinsec/Pinsec.scala
+index 249ebb6..19b08ee 100644
+--- a/lib/src/main/scala/spinal/lib/soc/pinsec/Pinsec.scala
++++ b/lib/src/main/scala/spinal/lib/soc/pinsec/Pinsec.scala
+@@ -139,15 +139,15 @@ class Pinsec(axiFrequency : BigDecimal) extends Component{
+ 
+     val ram = Axi4SharedOnChipRam(
+       dataWidth = 32,
+-      byteCount = 4 kB,
++      byteCount = 36 kB,
+       idWidth = 4
+     )
+ 
+     val sdramCtrl = Axi4SharedSdramCtrl(
+       axiDataWidth = 32,
+       axiIdWidth   = 4,
+-      layout       = IS42x320D.layout,
+-      timing       = IS42x320D.timingGrade7,
++      layout       = W9825G6JH6.layout,
++      timing       = W9825G6JH6.timingGrade7,
+       CAS          = 3
+     )
+ 
+@@ -200,8 +200,8 @@ class Pinsec(axiFrequency : BigDecimal) extends Component{
+     val axiCrossbar = Axi4CrossbarFactory()
+ 
+     axiCrossbar.addSlaves(
+-      ram.io.axi       -> (0x00000000L,   4 kB),
+-      sdramCtrl.io.axi -> (0x40000000L,  64 MB),
++      ram.io.axi       -> (0x00000000L,  36 kB),
++      sdramCtrl.io.axi -> (0x40000000L,  32 MB),
+       apbBridge.io.axi -> (0xF0000000L,   1 MB)
+     )
+ 
+@@ -268,7 +268,7 @@ class Pinsec(axiFrequency : BigDecimal) extends Component{
+ object Pinsec{
+   def main(args: Array[String]) {
+     val config = SpinalConfig().dumpWave()
+-    config.generateVerilog(new Pinsec(100 MHz))
+-    config.generateVhdl(new Pinsec(100 MHz))
++    config.generateVerilog(new Pinsec(50 MHz))
++    config.generateVhdl(new Pinsec(50 MHz))
+   }
+```
 ##To compile RISCV software
 ```
 git clone git@github.com:Dolu1990/pinsecSoftware.git
