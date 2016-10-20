@@ -102,18 +102,32 @@ cd openocd_riscv
 make
 ls src/openocd
 ```
-##Connect JTAG to RISCV with FT2232H 
+##Run
+
+ - Connect JTAG to RISCV with FT2232H 
 
 Connect pins: ||gnd<->gnd, ||tck<->adbus0, ||tdi<->adbus1, ||tdo<->adbus2, ||tms<->adbus3||
 ```
 src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE" -f tcl/target/riscv_spinal.cfg -s tcl
 ```
-##Use JTAG to load and run RISCV software
+ - Configure FPGA
+ 
+Connect miniSpartan+ USB
+```
+xc3sprog -c ftdi ../miniSpartan6-plus/projects/pinsec/work/top.bit
+```
+ - Use JTAG to load and run RISCV software
+ 
+Connect FT2232H USB
 ```
 /opt/riscv32gdb/bin/riscv32-unknown-elf-gdb ../pinsecSoftware/tests/cDemo/build/cDemo.elf --eval-command='target remote :3333'
 monitor reset halt
 load
 c
+```
+ - Open RISCV UART 115200 8N1
+```
+minicom -D /dev/ttyUSB1 
 ```
 #References
  - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/hardware
