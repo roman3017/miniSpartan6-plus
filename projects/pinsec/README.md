@@ -106,7 +106,16 @@ ls src/openocd
 
  - Connect JTAG to RISCV with FT2232H 
 
-Connect pins: ||gnd<->gnd, ||tck<->adbus0, ||tdi<->adbus1, ||tdo<->adbus2, ||tms<->adbus3||
+Connect pins: 
+
+ms+ | ft2232h
+----|--------
+gnd |gnd
+a0 tck |adbus0
+a1 tdi |adbus1
+a2 tdo |adbus2
+a3 tms |adbus3
+
 ```
 src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE" -f tcl/target/riscv_spinal.cfg -s tcl
 ```
