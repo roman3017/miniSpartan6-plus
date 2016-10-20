@@ -39,6 +39,9 @@ load
 c
 ```
 #References
+ - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/hardware
+ - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/software
+ - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/hardware_toplevel 
  - https://github.com/SpinalHDL/SpinalHDL
- - ​https://github.com/Dolu1990/openocd_riscv
+ - https://github.com/Dolu1990/openocd_riscv
  - https://github.com/Dolu1990/pinsecSoftware
