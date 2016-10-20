@@ -1,5 +1,5 @@
 
-#Instructions
+#RISCV-Pinsec
 ##Generate updated Pinsec.v if needed
 ```
 git clone git@github.com:SpinalHDL/SpinalHDL.git
@@ -112,20 +112,20 @@ src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE
 ```
  - Configure FPGA
  
-Connect miniSpartan+ USB
+Connect miniSpartan+ USB to PC
 ```
 xc3sprog -c ftdi ../miniSpartan6-plus/projects/pinsec/work/top.bit
 ```
  - Use JTAG to load and run RISCV software
  
-Connect FT2232H USB
+Connect FT2232H USB to PC
 ```
 /opt/riscv32gdb/bin/riscv32-unknown-elf-gdb ../pinsecSoftware/tests/cDemo/build/cDemo.elf --eval-command='target remote :3333'
 monitor reset halt
 load
 c
 ```
- - Open RISCV UART 115200 8N1
+ - Open RISCV UART 115200 8N1 on PC
 ```
 minicom -D /dev/ttyUSB1 
 ```
