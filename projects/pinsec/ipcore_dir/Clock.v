@@ -56,7 +56,7 @@
 // "Clock    Freq (MHz) (degrees) Cycle (%) Jitter (ps)  Error (ps)"
 //----------------------------------------------------------------------------
 // CLK_OUT1____50.000______0.000______50.0______200.000____150.000
-// CLK_OUT2___100.000______0.000______50.0______400.000____150.000
+// CLK_OUT2____25.000______0.000______50.0______300.000____150.000
 //
 //----------------------------------------------------------------------------
 // "Input Clock   Freq (MHz)    Input Jitter (UI)"
@@ -92,7 +92,7 @@ module Clock
   wire [7:0]  status_int;
   wire clkfb;
   wire clk0;
-  wire clk2x;
+  wire clkdv;
 
   DCM_SP
   #(.CLKDV_DIVIDE          (2.000),
@@ -114,11 +114,11 @@ module Clock
     .CLK90                 (),
     .CLK180                (),
     .CLK270                (),
-    .CLK2X                 (clk2x),
+    .CLK2X                 (),
     .CLK2X180              (),
     .CLKFX                 (),
     .CLKFX180              (),
-    .CLKDV                 (),
+    .CLKDV                 (clkdv),
     // Ports for dynamic phase shift
     .PSCLK                 (1'b0),
     .PSEN                  (1'b0),
@@ -143,7 +143,7 @@ module Clock
 
   BUFG clkout2_buf
    (.O   (CLK_OUT2),
-    .I   (clk2x));
+    .I   (clkdv));
 
 
 

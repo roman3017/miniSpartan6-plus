@@ -41,15 +41,8 @@ module top
   output SDRAM_CASn,
   output SDRAM_WEn,
   
-//  output [3:0] TMDS_out_P,
-//  output [3:0] TMDS_out_N,
- 
-//  output SD_CLK,
-//  output SD_CD_DAT3,
-//  input SD_DAT0,
-//  output SD_DAT1,
-//  output SD_DAT2,
-//  output SD_CMD,
+  output [3:0] TMDS_out_P,
+  output [3:0] TMDS_out_N,
  
   output [7:0] LEDS
 );
@@ -63,13 +56,21 @@ module top
   wire [15:0] SDRAM_DQ_write;
   wire SDRAM_DQ_writeEnable;
   
+  wire pixClk;
+  wire [7:0] Red;
+  wire [7:0] Green;
+  wire [7:0] Blue;
+  wire HSync;
+  wire VSync;
+  wire ColorEnable;
+
   assign LEDS = gpioA_write[7:0];
   assign SDRAM_DATA = (SDRAM_DQ_writeEnable) ? SDRAM_DQ_write : 16'bz;
   
   Clock		Clock(
 				.CLK_IN1(CLK50),
 				.CLK_OUT1(axiClk),
-				.CLK_OUT2());
+				.CLK_OUT2(pixClk));
 
   ODDR2 		ExportClock(
 				.D0(1'b1),
@@ -84,7 +85,7 @@ module top
   Pinsec		Pinsec(
 				.io_asyncReset(1'b0),
 				.io_axiClk(axiClk),
-				.io_vgaClk(),
+				.io_vgaClk(pixClk),
 				.io_jtag_tms(TMS),
 				.io_jtag_tdi(TDI),
 				.io_jtag_tdo(TDO),
@@ -100,21 +101,32 @@ module top
 				.io_sdram_CSn(SDRAM_CSn),
 				.io_sdram_RASn(SDRAM_RASn),
 				.io_sdram_WEn(SDRAM_WEn),
-				.io_gpioA_read(gpioA_read),
+				.io_gpioA_read(),
 				.io_gpioA_write(gpioA_write),
-				.io_gpioA_writeEnable(gpioA_writeEnable),
+				.io_gpioA_writeEnable(),
 				.io_gpioB_read(),
 				.io_gpioB_write(),
 				.io_gpioB_writeEnable(),
 				.io_uart_txd(UART0_TXD),
 				.io_uart_rxd(UART0_RXD),
-				.io_vga_vSync(),
-				.io_vga_hSync(),
-				.io_vga_colorEn(),
-				.io_vga_color_r(),
-				.io_vga_color_g(),
-				.io_vga_color_b(),
+				.io_vga_vSync(VSync),
+				.io_vga_hSync(HSync),
+				.io_vga_colorEn(ColorEnable),
+				.io_vga_color_r(Red[7:3]),
+				.io_vga_color_g(Green[7:2]),
+				.io_vga_color_b(Blue[7:3]),
 				.io_timerExternal_clear(),
 				.io_timerExternal_tick());
+
+  dvid_out	dvid_out(
+				.clk_pixel(pixClk),
+				.red_p(Red),
+				.green_p(Green),
+				.blue_p(Blue),
+				.blank(~ColorEnable),
+				.hsync(HSync),
+				.vsync(VSync),
+				.tmds_out_p(TMDS_out_P),
+				.tmds_out_n(TMDS_out_N));
 
 endmodule
