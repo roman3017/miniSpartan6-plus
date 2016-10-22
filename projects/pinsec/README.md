@@ -36,11 +36,17 @@ ls src/openocd
 ```
 
 ##Run
-One should be able to use any OpenOCD supported JTAG interface. I have tested with BusBlaster and FT2232H.
+ - **Configure** FPGA
 
- - Connect JTAG to RISCV with FT2232H 
+ Connect miniSpartan6+ USB to PC
+```
+xc3sprog -c ftdi ../miniSpartan6-plus/projects/pinsec/work/top.bit
+```
 
- Connect pins: 
+ - **Connect** JTAG to RISCV with FT2232H
+ 
+ One should be able to use any OpenOCD supported JTAG interface. I have tested with BusBlaster and FT2232H. 
+Connect pins: 
 
 miniSpartan6+ | ft2232h
 ----|--------
@@ -53,14 +59,8 @@ a3 tms |adbus3
 ```
 src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE" -f tcl/target/riscv_spinal.cfg -s tcl
 ```
- - Configure FPGA
 
- Connect miniSpartan6+ USB to PC
-```
-xc3sprog -c ftdi ../miniSpartan6-plus/projects/pinsec/work/top.bit
-```
-
- - Use JTAG to load and run RISCV software
+ - **Load** RISCV software
  
  Connect FT2232H USB to PC
 ```
@@ -74,13 +74,10 @@ load_image tests/cDemo/build/cDemo.elf
 resume
 ```
 
- - Open RISCV UART 115200 8N1 on PC if running UART tests cDemo
-
+ Connect monitor to HDMI out and open RISCV UART on PC
 ```
-minicom -D /dev/ttyUSB1 
+minicom -D /dev/ttyUSB1 -b 115200 -8 
 ```
-
- - Connect HDMI out to monitor if running VGA test ugfx
 
 ##Generate updated Pinsec.v if needed
 ```
@@ -101,3 +98,7 @@ ls Pinsec.v
  - https://github.com/SpinalHDL/SpinalHDL
  - https://github.com/Dolu1990/openocd_riscv
  - https://github.com/Dolu1990/pinsecSoftware
+
+#Acknowledgement
+I have got a lot of help and tips from [Dolu1990](https://github.com/Dolu1990)
+in order to get Pinsec running on miniSpartan6+, which is very appreciated.

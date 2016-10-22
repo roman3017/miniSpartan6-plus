@@ -24,7 +24,7 @@ sudo ./xc3sprog -c ftdi -I -e
 ## chipscope/impact
 
 ```sh
-git clone https://github.com/roman3017/xvcd.git
+git clone git@github.com:tmbinc/xvcd.git -b ftdi
 cd xvcd
 make
 sudo build/xvcd &
