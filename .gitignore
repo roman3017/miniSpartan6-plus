@@ -2,10 +2,12 @@ work/
 iseconfig/
 tmp/
 _xmsgs/
+_ngo/
 doc/
 example_design/
 implement/
 simulation/
+xlnx_auto_0_xdb/
 *.log
 *.tcl
 *.txt

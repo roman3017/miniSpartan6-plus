@@ -1,8 +1,13 @@
 #RISCV-Pinsec
-
+```
+cd ~/projects/
+export $TOP=`pwd`
+git clone git@github.com:roman3017/miniSpartan6-plus.git
+```
 ##Compile RISCV gcc
 The working toolchain is borrowed from: https://github.com/cliffordwolf/picorv32
 ```
+cd $TOP
 git clone https://github.com/riscv/riscv-gnu-toolchain
 cd riscv-gnu-toolchain-rv32i
 git checkout 7e48594
@@ -18,14 +23,16 @@ make
 
 ##Compile RISCV software
 ```
-git clone git@github.com:roman3017/pinsecSoftware.git -b msp
+cd $TOP
+git clone git@github.com:Dolu1990/pinsecSoftware.git
 cd pinsecSoftware/
 git submodule update --init --recursive
-make
+LDSCRIPT=$TOP/miniSpartan6-plus/projects/pinsec/pinsec/linker.ld CFLAGS='-DCONFIG_CORE_HZ=50000000' make
 ```
 
 ##Compile RISCV openocd
 ```
+cd $TOP
 git clone git@github.com:Dolu1990/openocd_riscv.git
 cd openocd_riscv
 ./bootstrap
@@ -40,7 +47,10 @@ ls src/openocd
 
  Connect miniSpartan6+ USB to PC
 ```
-xc3sprog -c ftdi ../miniSpartan6-plus/projects/pinsec/work/top.bit
+cd $TOP/miniSpartan6-plus/projects/pinsec/
+source /opt/Xilinx/14.7/ISE_DS/settings64.sh
+xtclsh pinsec.tcl rebuild_project
+xc3sprog -c ftdi work/top.bit
 ```
 
  - **Connect** JTAG to RISCV with FT2232H
@@ -57,6 +67,7 @@ a2 tdo |adbus2
 a3 tms |adbus3
 
 ```
+cd $TOP/openocd_riscv
 src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE" -f tcl/target/riscv_spinal.cfg -s tcl
 ```
 
@@ -64,7 +75,7 @@ src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE
  
  Connect FT2232H USB to PC
 ```
-cd pinsecSoftware/
+cd $TOP/pinsecSoftware/
 telnet localhost 4444
 reset halt
 load_image tests/ugfx/build/ugfx.elf
@@ -81,6 +92,7 @@ minicom -D /dev/ttyUSB1 -b 115200 -8
 
 ##Generate updated Pinsec.v if needed
 ```
+cd $TOP
 git clone git@github.com:roman3017/SpinalHDL.git -b msp
 cd SpinalHDL/
 sbt clean
