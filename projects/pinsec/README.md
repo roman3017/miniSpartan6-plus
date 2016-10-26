@@ -36,27 +36,32 @@ cd $TOP
 git clone git@github.com:Dolu1990/openocd_riscv.git
 cd openocd_riscv
 ./bootstrap
-./configure --help
 ./configure --enable-legacy-ft2232_libftdi
 make
 ls src/openocd
 ```
 
-##Run
- - **Configure** FPGA
-
- Connect miniSpartan6+ USB to PC
+##Implement Pinsec
 ```
 cd $TOP/miniSpartan6-plus/projects/pinsec/
 source /opt/Xilinx/14.7/ISE_DS/settings64.sh
 xtclsh pinsec.tcl rebuild_project
-xc3sprog -c ftdi work/top.bit
+```
+
+##Program and Run
+ - **Program** FPGA
+
+ Connect miniSpartan6+ USB to PC
+```
+cd $TOP/miniSpartan6-plus/projects/pinsec/work/
+xc3sprog -c ftdi top.bit
 ```
 
  - **Connect** JTAG to RISCV with FT2232H
- 
- One should be able to use any OpenOCD supported JTAG interface. I have tested with BusBlaster and FT2232H. 
-Connect pins: 
+
+ One should be able to use any OpenOCD supported JTAG interface. I have tested with BusBlaster and FT2232H.
+
+Connect pins:
 
 miniSpartan6+ | ft2232h
 ----|--------
@@ -66,38 +71,53 @@ a1 tdi |adbus1
 a2 tdo |adbus2
 a3 tms |adbus3
 
+Connect FT2232H USB to PC and use the following configuration file for FT2232H
+
+```
+#ft2232h_breakout.cfg
+interface ft2232
+ft2232_serial FTLT3SE
+ft2232_layout usbjtag
+ft2232_vid_pid 0x0403 0x6010
+adapter_khz 1000
+```
+
+Run openocd
+
 ```
 cd $TOP/openocd_riscv
-src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -c "ft2232_serial FTLT3SE" -f tcl/target/riscv_spinal.cfg -s tcl
+src/openocd -f tcl/interface/ftdi/ft2232h_breakout.cfg -f tcl/target/riscv_spinal.cfg -s tcl
 ```
 
  - **Load** RISCV software
- 
- Connect FT2232H USB to PC
+
 ```
 cd $TOP/pinsecSoftware/
 telnet localhost 4444
 reset halt
-load_image tests/ugfx/build/ugfx.elf
+load_image ../pinsecSoftware/tests/ugfx/build/ugfx.elf
 resume
+#check uart messages and blinking leds
 reset halt
-load_image tests/cDemo/build/cDemo.elf
+load_image ../pinsecSoftware/tests/cDemo/build/cDemo.elf
 resume
+#check monitor showing changing 3d surface
 ```
 
  Connect monitor to HDMI out and open RISCV UART on PC
 ```
-minicom -D /dev/ttyUSB1 -b 115200 -8 
+minicom -D /dev/ttyUSB1 -b 115200 -8
 ```
 
 ##Generate updated Pinsec.v if needed
 ```
 cd $TOP
-git clone git@github.com:roman3017/SpinalHDL.git -b msp
+git clone git@github.com:SpinalHDL/SpinalHDL.git
+cp miniSpartan6-plus/projects/pinsec/pinsec/ms6p.scala SpinalHDL/lib/src/main/scala/spinal/lib/soc/pinsec/
 cd SpinalHDL/
 sbt clean
-sbt "project SpinalHDL-lib" "run-main spinal.lib.soc.pinsec.Pinsec"
-ls Pinsec.v
+sbt "project SpinalHDL-lib" "run-main PinsecSpartan6Plus"
+cp Pinsec.v $TOP/miniSpartan6-plus/projects/pinsec/pinsec/
 ```
 
 #References
@@ -106,11 +126,11 @@ ls Pinsec.v
  - https://github.com/riscv/riscv-binutils-gdb
  - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/hardware
  - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/software
- - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/hardware_toplevel 
+ - https://spinalhdl.github.io/SpinalDoc/spinal/lib/pinsec/hardware_toplevel
  - https://github.com/SpinalHDL/SpinalHDL
  - https://github.com/Dolu1990/openocd_riscv
  - https://github.com/Dolu1990/pinsecSoftware
 
 #Acknowledgement
 I have got a lot of help and tips from [Dolu1990](https://github.com/Dolu1990)
-in order to get Pinsec running on miniSpartan6+, which is very appreciated.
+in order to get Pinsec running on miniSpartan6+, which is very much appreciated.
