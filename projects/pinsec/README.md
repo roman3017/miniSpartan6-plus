@@ -1,10 +1,11 @@
-#RISCV-Pinsec
+# RISCV-Pinsec
 ```
 cd ~/projects/
 export $TOP=`pwd`
 git clone git@github.com:roman3017/miniSpartan6-plus.git
 ```
-##Compile RISCV gcc
+
+## Compile RISCV gcc
 The working toolchain is borrowed from: https://github.com/cliffordwolf/picorv32
 ```
 cd $TOP
@@ -21,7 +22,7 @@ make
 
 ```
 
-##Compile RISCV software
+## Compile RISCV software
 ```
 cd $TOP
 git clone git@github.com:Dolu1990/pinsecSoftware.git
@@ -30,7 +31,7 @@ git submodule update --init --recursive
 LDSCRIPT=$TOP/miniSpartan6-plus/projects/pinsec/pinsec/linker.ld CFLAGS='-DCONFIG_CORE_HZ=50000000' make
 ```
 
-##Compile RISCV openocd
+## Compile RISCV openocd
 ```
 cd $TOP
 git clone git@github.com:Dolu1990/openocd_riscv.git
@@ -41,14 +42,14 @@ make
 ls src/openocd
 ```
 
-##Implement Pinsec
+## Implement Pinsec
 ```
 cd $TOP/miniSpartan6-plus/projects/pinsec/
 source /opt/Xilinx/14.7/ISE_DS/settings64.sh
 xtclsh pinsec.tcl rebuild_project
 ```
 
-##Program and Run
+## Program and Run
  - **Program** FPGA
 
  Connect miniSpartan6+ USB to PC
@@ -109,7 +110,7 @@ resume
 minicom -D /dev/ttyUSB1 -b 115200 -8
 ```
 
-##Generate updated Pinsec.v if needed
+## Generate updated Pinsec.v if needed
 ```
 cd $TOP
 git clone git@github.com:SpinalHDL/SpinalHDL.git
@@ -120,7 +121,7 @@ sbt "project SpinalHDL-lib" "run-main PinsecSpartan6Plus"
 cp Pinsec.v $TOP/miniSpartan6-plus/projects/pinsec/pinsec/
 ```
 
-#References
+# References
  - http://riscv.org/software-tools
  - https://github.com/riscv/riscv-tools
  - https://github.com/riscv/riscv-binutils-gdb
@@ -131,6 +132,6 @@ cp Pinsec.v $TOP/miniSpartan6-plus/projects/pinsec/pinsec/
  - https://github.com/Dolu1990/openocd_riscv
  - https://github.com/Dolu1990/pinsecSoftware
 
-#Acknowledgement
+# Acknowledgement
 I have got a lot of help and tips from [Dolu1990](https://github.com/Dolu1990)
 in order to get Pinsec running on miniSpartan6+, which is very much appreciated.
