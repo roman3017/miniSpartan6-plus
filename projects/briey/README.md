@@ -85,8 +85,8 @@ index 56526357c..018f6ca09 100644
 Run openocd
 
 ```sh
-cd $TOP/openocd_riscv
-src/openocd -c "set BRIEY_CPU0_YAML $TOP/miniSpartan6-plus/projects/briey/src/cpu0.yaml" -f tcl/interface/ftdi/ft2232h_breakout.cfg -f tcl/target/briey.cfg -s tcl
+cd $TOP
+openocd_riscv/src/openocd -c "set BRIEY_CPU0_YAML $PWD/miniSpartan6-plus/projects/briey/src/cpu0.yaml" -f interface/ftdi/ft2232h_breakout.cfg -f target/briey.cfg -s openocd_riscv/tcl
 ```
 
 - **Load** RISCV software
@@ -121,8 +121,9 @@ cp miniSpartan6-plus/projects/briey/src/ms6p.scala VexRiscv/src/main/scala/vexri
 cd VexRiscv/
 sbt clean
 sbt "runMain BrieySpartan6Plus"
-cp Briey.v ../miniSpartan6-plus/projects/briey/src/
-cp cpu0.yaml ../miniSpartan6-plus/projects/briey/src/
+cd -
+cp VexRiscv/Briey.v miniSpartan6-plus/projects/briey/src/
+cp VexRiscv/cpu0.yaml miniSpartan6-plus/projects/briey/src/
 ```
 
 ## References
